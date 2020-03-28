@@ -4,13 +4,15 @@ import { useQuery } from '@apollo/react-hooks';
 import Movie from '../components/Movie';
 import styled from 'styled-components';
 
+// @client는 isLiked가 server가 아니라 client에서 등록되었다는 의미
 const GET_MOVIES = gql`
- {
-     movies {
-         id
-         medium_cover_image
-     }
- }
+  {
+    movies {
+      id
+      medium_cover_image
+      isLiked @client
+    }
+  }
 `;
 
 const Container = styled.div`
@@ -72,7 +74,12 @@ export default () => {
 
         <Movies>
           {data?.movies?.map(m => (
-            <Movie key={m.id} id={m.id} bg={m.medium_cover_image} />
+            <Movie
+              key={m.id}
+              id={m.id}
+              isLiked={m.isLiked}
+              bg={m.medium_cover_image}
+            />
           ))}
         </Movies>
       </Container>
