@@ -7,9 +7,7 @@ import styled from "styled-components";
 // gql의 getMovie() 라는 이름은 graphql 서버와는 관련이 없고
 // 아무렇게나 이름을 지어도 동작하는데는 이상이 없다.
 const GET_MOVIE = gql`
-
   query getMovie($id: Int!) {
-
     movie(id: $id) {
       title
       medium_cover_image
@@ -17,9 +15,7 @@ const GET_MOVIE = gql`
       rating
       description_intro
     }
-
   }
-
 `;
 
 const Container = styled.div`
@@ -34,6 +30,7 @@ const Container = styled.div`
 
 const Column = styled.div`
   margin-left: 10px;
+  width: 50%;
 `;
 
 const Title = styled.h1`
@@ -54,6 +51,9 @@ const Poster = styled.div`
   width: 25%;
   height: 60%;
   background-color: transparent;
+  background-image: url(${props => props.bg});
+  background-size: cover;
+  background-position: center center;
 `;
 
 
@@ -65,14 +65,30 @@ export default () => {
         variables: {id: parseInt(id)}
     });
 
+    console.log(loading, data);
+
     return (
-       <Container>
-         <Column>
-           <Title>Name</Title>
-           <Subtitle>English · 4.5</Subtitle>
-           <Description>lorem ipsum lalalla </Description>
-         </Column>
-         <Poster></Poster>
-       </Container>
-     );
+      <Container>
+        <Column>
+          <Title>
+            {loading ? "loading..." : data && data.movie && data.movie.title}
+          </Title>
+          {!loading && data.movie && (
+            <>
+              <Subtitle>
+                {data.movie.language} · {data.movie.rating}
+              </Subtitle>
+              <Description>{data.movie.description_intro}</Description>
+            </>
+          )}
+        </Column>
+        <Poster
+          bg={
+            data && data.movie
+              ? `https://yst.am/${data.movie.medium_cover_image}`
+              : ""
+          }
+        />
+      </Container>
+    );
 };
