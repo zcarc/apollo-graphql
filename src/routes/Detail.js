@@ -9,11 +9,13 @@ import styled from "styled-components";
 const GET_MOVIE = gql`
   query getMovie($id: Int!) {
     movie(id: $id) {
+      id
       title
       medium_cover_image
       language
       rating
       description_intro
+      isLiked @client
     }
     suggestions(id: $id) {
       id
@@ -75,7 +77,9 @@ export default () => {
       <Container>
         <Column>
           <Title>
-            {loading ? "loading..." : data?.movie?.title}
+            {loading
+              ? "loading..."
+              : `${data?.movie?.title} ${data?.movie?.isLiked ? "❤" : "😢"}`}
           </Title>
           {!loading && (
             <>
@@ -86,9 +90,7 @@ export default () => {
             </>
           )}
         </Column>
-        <Poster
-          bg={`https://yst.am/${data?.movie?.medium_cover_image}`}
-        />
+        <Poster bg={`https://yst.am/${data?.movie?.medium_cover_image}`} />
       </Container>
     );
 };

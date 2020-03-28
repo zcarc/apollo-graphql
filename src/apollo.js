@@ -15,12 +15,11 @@ const client = new ApolloClient({
     },
 
     Mutation: {
-      likeMovie: (_, { id }, { cache }) => {
+      toggleLikeMovie: (_, { id, isLiked }, { cache }) => {
         cache.writeData({
           id: `Movie:${id}`,
           data: {
-            isLiked: true,
-            medium_cover_image: 'lalalala'
+            isLiked: !isLiked
           }
         });
       }
