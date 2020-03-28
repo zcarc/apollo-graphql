@@ -12,3 +12,6 @@ ReactDOM.render(
   </ApolloProvider>,
   document.getElementById('root')
 );
+
+
+// 마무리 - #2.3 Conclusions
